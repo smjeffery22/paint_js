@@ -2,6 +2,7 @@ const canvas = document.getElementById('jsCanvas');
 // get canvas' 2D rendering context
 // context to manipulate pixels inside canvas
 const ctx = canvas.getContext('2d');
+const colors = document.getElementsByClassName('jsColor');
 
 // to give size to the pixel manipulation
 canvas.width = 700;
@@ -12,12 +13,12 @@ ctx.lineWidth = 2.5;
 
 let painting = false;
 
-function stopPainting(e) {
+function stopPainting() {
 	painting = false;
 }
 
 function startPainting() {
-  painting = true;
+	painting = true;
 }
 
 function onMouseMove(e) {
@@ -25,25 +26,30 @@ function onMouseMove(e) {
 	const x = e.offsetX;
 	const y = e.offsetY;
 
-  if(!painting) {
-    // creates path as mouse moves
-    ctx.beginPath();
-    // moves path to x, y position of the mouse
-    // starting point of line
-    ctx.moveTo(x, y);
-  } else {
-    // creates line from the previous position of the path to the position of the line
-    // end point of line
-    // happens every time mouse is moved
-    ctx.lineTo(x, y);
-    // creates line after creating path
-    ctx.stroke()
-  }
+	if (!painting) {
+		// creates path as mouse moves
+		ctx.beginPath();
+		// moves path to x, y position of the mouse
+		// starting point of line
+		ctx.moveTo(x, y);
+	} else {
+		// creates line from the previous position of the path to the position of the line
+		// end point of line
+		// happens every time mouse is moved
+		ctx.lineTo(x, y);
+		// creates line after creating path
+		ctx.stroke();
+	}
 }
 
 function onMouseDown(e) {
 	painting = true;
 	console.log(e);
+}
+
+function handleColorClick(e) {
+	const color = e.target.style.backgroundColor;
+  ctx.strokeStyle = color;
 }
 
 if (canvas) {
@@ -52,3 +58,7 @@ if (canvas) {
 	canvas.addEventListener('mouseup', stopPainting);
 	canvas.addEventListener('mouseleave', stopPainting);
 }
+
+Array.from(colors).forEach((color) =>
+	color.addEventListener('click', handleColorClick)
+);
